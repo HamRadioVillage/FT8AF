@@ -96,6 +96,13 @@ internal fun txRxSplitFromSynFrequency(synFrequency: Boolean): Boolean = !synFre
 internal fun synFrequencyFromTxRxSplit(split: Boolean): Boolean = !split
 
 /**
+ * Whether the "Hold TX freq" toggle can be changed. Holding only matters when TX
+ * is locked to RX: `FT8TransmitSignal.shouldFollowTargetFreq` never moves the
+ * offset in split mode, so the toggle would have no effect there.
+ */
+internal fun holdTxFreqToggleEnabled(synFrequency: Boolean): Boolean = synFrequency
+
+/**
  * Transmission settings: TX/RX split, watchdog, stop-after, TX protection
  * (auto-volume ALC + SWR halt), and auto-sequencing.
  */
@@ -272,6 +279,7 @@ fun TransmissionSettings(
                         label = stringResource(R.string.settings_hold_tx_freq),
                         description = stringResource(R.string.settings_hold_tx_freq_desc),
                         toggle = holdTxFreq,
+                        enabled = holdTxFreqToggleEnabled(synFrequency),
                         onToggleChange = { checked ->
                             holdTxFreq = checked
                             GeneralVariables.holdTxFreq = checked

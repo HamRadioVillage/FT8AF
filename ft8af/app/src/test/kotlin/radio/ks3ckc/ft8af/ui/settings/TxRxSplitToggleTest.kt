@@ -39,4 +39,16 @@ class TxRxSplitToggleTest {
                 .isEqualTo(stored)
         }
     }
+
+    @Test
+    fun `hold TX freq toggle is enabled when TX is locked to RX`() {
+        assertThat(holdTxFreqToggleEnabled(synFrequency = true)).isTrue()
+    }
+
+    @Test
+    fun `hold TX freq toggle is disabled in split mode`() {
+        // In split mode the offset never follows the answered station, so
+        // holding it has no effect.
+        assertThat(holdTxFreqToggleEnabled(synFrequency = false)).isFalse()
+    }
 }
